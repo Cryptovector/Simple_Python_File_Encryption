@@ -17,7 +17,7 @@ def Gen_Scrypt_Instance(salt):
 	)
 	return kdf
 
-def Generate_Key_Scrypt(Key): #Standart Zeros wird dann aufgefüllt mit weiteren Zeros um entschleusselbar zu sein
+def Generate_Key_Scrypt(Key):
 	salt = os.urandom(16)
 	kdf = Gen_Scrypt_Instance(salt)
 	Der_Key = kdf.derive(Key)
@@ -26,7 +26,7 @@ def Generate_Key_Scrypt(Key): #Standart Zeros wird dann aufgefüllt mit weiteren
 	print("----Key derivation on Encryption Complete----")
 	return (salt + Der_Key_Hash.finalize()), Der_Key 
 
-def Decrypt_Key_Scrypt(salt, Hash, Key): #Standart Zeros | Key unvollstaendig | 2 ** Rounds  
+def Decrypt_Key_Scrypt(salt, Hash, Key): 
 	kdf = Gen_Scrypt_Instance(salt)
 	Der_Key = kdf.derive(Key)
 	Der_Key_Hash = hashes.Hash(hashes.SHA256(), backend=default_backend())
@@ -37,7 +37,7 @@ def Decrypt_Key_Scrypt(salt, Hash, Key): #Standart Zeros | Key unvollstaendig | 
 	else:
 		return 0	
 
-def encrypt_file(key, in_filename, out_filename=None): #, chunksize=64*1024
+def encrypt_file(key, in_filename, out_filename=None):
 	
 	if not out_filename:
 		out_filename = in_filename + '.enc'
@@ -66,7 +66,7 @@ def encrypt_file(key, in_filename, out_filename=None): #, chunksize=64*1024
 
 
 
-def decrypt_file(key, in_filename, out_filename=None): #, chunksize=24*1024
+def decrypt_file(key, in_filename, out_filename=None): 
 
 	if not out_filename:
 		out_filename = os.path.splitext(in_filename)[0]
@@ -95,7 +95,7 @@ def decrypt_file(key, in_filename, out_filename=None): #, chunksize=24*1024
 	HMAC.verify(AC)
 
 	with open(out_filename, 'wb') as outfile:
-		outfile.write(decrypt_file[0:(0-(decrypt_file[-1]+1))])#len(decrypt_file)-(Paddinglength+1)
+		outfile.write(decrypt_file[0:(0-(decrypt_file[-1]+1))])
 
 	print("---Decryption Complete---") 	
 
